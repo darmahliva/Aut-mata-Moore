@@ -1,0 +1,40 @@
+class MooreMachine:
+    def __init__(self):
+        # Estado inicial
+        self.state = "S0"
+        # Salida inicial vacía
+        self.output = []
+
+    def transition(self, bit):
+        # Cambia de estado según el estado actual y el bit de entrada
+        if self.state == "S0":
+            if bit == "1":
+                self.state = "S1"
+                self.output.append("1")
+            else:
+                self.state = "S0"
+                self.output.append("0")
+
+        elif self.state == "S1":
+            if bit == "1":
+                # Detecta secuencia "11" y reemplaza por "00"
+                self.state = "S0"
+                self.output[-1] = "0"  # Reemplaza el último "1" por "0"
+                self.output.append("0")
+            else:
+                # Si no encuentra "11", mantiene el primer "1"
+                self.state = "S0"
+                self.output.append("0")
+
+    def process_input(self, input_stream):
+        # Procesa cada bit de la cadena de entrada
+        for bit in input_stream:
+            self.transition(bit)
+        return "".join(self.output)
+
+# Solicitar entrada del usuario
+input_stream = input("Ingrese la cadena de 1s y 0s: ")
+moore_machine = MooreMachine()
+output_stream = moore_machine.process_input(input_stream)
+print(f"Entrada: {input_stream}")
+print(f"Salida: {output_stream}")
